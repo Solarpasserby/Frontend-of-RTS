@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { login, createUser } from "@/api/user";
+import { authenticateAdmin } from "@/api/admin";
 
 const mode = ref(1);
 const isReg = ref(false);
@@ -41,6 +42,11 @@ const handlePost = async () => {
         }
         break;
       case 3:
+        delete postForm.value.telephone;
+        res = await authenticateAdmin(postForm.value);
+        if (res.status == 200) {
+          router.push(`/admin`);
+        }
         break;
     }
   } catch (error) {
@@ -80,10 +86,10 @@ const handlePost = async () => {
   left: 65%;
   width: 320px;
   padding: 40px 20px;
-  border: 1px solid #ccc; /* 添加边框 */
-  border-radius: 8px; /* 可选：添加圆角 */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 可选：添加阴影 */
-  background-color: #fff; /* 可选：添加背景色 */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
 .menu {

@@ -32,8 +32,18 @@ const getUser = async (id) => {
     }
 }
 
+const updateUser = async (id, user) => {
+    try {
+        const response = await instance.patch(`/users/${id}`, user);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export {
     createUser,
     login,
     getUser,
+    updateUser,
 }

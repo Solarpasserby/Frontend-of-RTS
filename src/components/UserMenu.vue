@@ -1,6 +1,5 @@
 <script setup>
-import { ref, computed, defineProps } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 const props = defineProps({
   userId: {
@@ -12,7 +11,6 @@ const props = defineProps({
     default: '1',
   },
 });
-const route = useRoute();
 
 const infoUrl = computed(() => {
   return `/home/${props.userId}/info`;
