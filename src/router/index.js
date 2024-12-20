@@ -8,6 +8,7 @@ import MgTrains from '@/views/MgTrains.vue'
 import MgUsers from '@/views/MgUsers.vue'
 import MgOrders from '@/views/MgOrders.vue'
 import MgRuns from '@/views/MgRuns.vue'
+import MgNums from '@/views/MgNums.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,7 +83,7 @@ const router = createRouter({
         {
           path: '/admin/nums',
           name: 'manage train run nums',
-          component: null,
+          component: MgNums,
         }
       ],
     }

@@ -214,7 +214,7 @@ onMounted(() => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <div class="dialog-footer">
+      <div>
         <el-button @click="handleCancel">取消</el-button>
         <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
       </div>

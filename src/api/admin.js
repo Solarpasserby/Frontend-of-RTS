@@ -94,48 +94,9 @@ const setEntityStatus = handleAsync(async (path, id, kidPath, status={}) => {
   return response;
 });
 
-// Station API
-const createStation = handleAsync(async (station) => {
-  const response = await instance.post("/stations/create", station);
-  return response;
-});
-
-const getStations = handleAsync(async (offset = 0, limit = 10) => {
-  const response = await instance.get(
-    `/stations/?offset=${offset}&limit=${limit}`
-  );
-  return response;
-});
-
-const getStation = handleAsync(async (id) => {
-  const response = await instance.get(`/stations/${id}`);
-  return response;
-});
-
-const updateStation = handleAsync(async (id, station) => {
-  const response = await instance.patch(`/stations/${id}`, station);
-  return response;
-});
-
-const deleteStation = handleAsync(async (id) => {
-  const response = await instance.delete(`/stations/${id}`);
-  return response;
-});
-
-const deprecateStation = handleAsync(async (id, status) => {
-  const response = await instance.patch(`/stations/${id}/deprecated`, status);
-  return response;
-});
-
 export {
   authenticateAdmin,
   getTableCount,
-  createStation,
-  getStations,
-  getStation,
-  updateStation,
-  deleteStation,
-  deprecateStation,
   createEntity,
   getEntities,
   getEntity,
