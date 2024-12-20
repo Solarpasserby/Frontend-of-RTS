@@ -86,7 +86,8 @@ const deleteEntity = handleAsync(async (path, id) => {
   return response;
 });
 
-const setEntityStatus = handleAsync(async (path, id, kidPath, status) => {
+const setEntityStatus = handleAsync(async (path, id, kidPath, status={}) => {
+  console.log(`/${path}/${id}/${kidPath}`);
   checkPath(path);
   // 没做orders的status设置
   const response = await instance.patch(`/${path}/${id}/${kidPath}`, status);

@@ -4,7 +4,10 @@ import Home from '@/views/Home.vue'
 import UserInfo from '@/views/UserInfo.vue'
 import Admin from '@/views/Admin.vue'
 import MgStations from '@/views/MgStations.vue'
+import MgTrains from '@/views/MgTrains.vue'
 import MgUsers from '@/views/MgUsers.vue'
+import MgOrders from '@/views/MgOrders.vue'
+import MgRuns from '@/views/MgRuns.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +62,7 @@ const router = createRouter({
         {
           path: '/admin/trains',
           name: 'manage trains',
-          component: null,
+          component: MgTrains,
         },
         {
           path: '/admin/users',
@@ -69,12 +72,12 @@ const router = createRouter({
         {
           path: '/admin/orders',
           name: 'manage orders',
-          component: null,
+          component: MgOrders,
         },
         {
           path: '/admin/runs',
           name: 'manage train runs',
-          component: null,
+          component: MgRuns,
         },
         {
           path: '/admin/nums',

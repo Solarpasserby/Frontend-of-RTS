@@ -38,7 +38,7 @@ const handleCancel = () => {
 };
 
 const handleConfirm = () => {
-  // createEntity("trains", trainData.value);
+  createEntity("trains", trainData.value);
   trainData.value = {};
   carriageData.value = {};
   baseDialogVisible.value = false;
@@ -52,39 +52,29 @@ const handleConfirm = () => {
     v-model="baseDialogVisible"
     title="添加列车"
     :before-close="handleCancel"
-    direction="rtl"
-    size="50%"
+    direction="ltr"
   >
-    <div class="base-dialog">
+    <div>
       <el-form :model="trainData">
-        <el-form-item
-          v-for="(v, k) in trainCreate"
-          :label="v"
-          :key="k"
-          :label-width="formLabelWidth"
-        >
-          <!-- <el-input v-model="trainData[k]" /> -->
-          <el-select v-model="trainData[k]">
-            <el-option label="高速列车" value="fast" />
-            <el-option label="低速列车" value="slow" />
+        <el-form-item label="Name" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="Area" :label-width="formLabelWidth">
+          <el-select
+            v-model="form.region"
+            placeholder="Please select activity area"
+          >
+            <el-option label="Area1" value="shanghai" />
+            <el-option label="Area2" value="beijing" />
           </el-select>
         </el-form-item>
       </el-form>
-    </div>
-    <div class="base-dialog-footer">
-        <el-button @click="handleCancel">取消</el-button>
-        <el-button type="success" @click="handleConfirm"> 确认 </el-button>
+      <div class="demo-drawer__footer">
+        <el-button @click="cancelForm">Cancel</el-button>
+        <el-button type="primary" :loading="loading" @click="onClick">
+          {{ loading ? "Submitting ..." : "Submit" }}
+        </el-button>
+      </div>
     </div>
   </el-drawer>
 </template>
-
-<style scoped>
-.base-dialog {
-  width: 50%;
-}
-
-.base-dialog-footer {
-  padding: 20px 40px;
-  text-align: right;
-}
-</style>

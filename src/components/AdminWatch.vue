@@ -13,12 +13,16 @@ const props = defineProps({
   // example: path: "stations"
   path: String,
   // example: entity: { name: "车站名称", city: "所属城市" }
-  entity: Object,
-  // example: dispaly: { id: "ID", name: "名称", city: "所属城市" }
-  dispaly: Object,
+  entityBase: Object,
+  entityCreate: Object,
+  entityUpdate: Object,
+  // example: display: { id: "ID", name: "名称", city: "所属城市" }
+  display: Object,
   // example: changes: { deprecated: "弃用" }
   changes: Object,
 });
+
+const emit = defineEmits(["rowClick", "create"]);
 
 const total = ref(0);
 const entityData = ref({});
@@ -32,14 +36,18 @@ const formLabelWidth = "120px";
 const limit = 10;
 const offset = computed(() => (currentPage.value - 1) * limit);
 
-const isCreateNeed = computed(() => {
+const isFormNecessary = computed(() => {
   return props.path !== "users" && props.path !== "orders";
 });
 
 const handleCreate = () => {
   entityData.value = {};
   isEdit.value = false;
-  DialogVisible.value = true;
+  if (props.path === "stations" || props.path === "train_runs") {
+    DialogVisible.value = true;
+  } else {
+    emit("create");
+  }
 };
 
 const handleEdit = (row) => {
@@ -54,7 +62,7 @@ const handleDelete = (row) => {
   if (!isConfirm) return;
   deleteEntity(props.path, row.id).then(() => {
     total.value -= 1;
-    getEntities(props.path, offset, limit).then((res) => {
+    getEntities(props.path, offset.value, limit).then((res) => {
       tableData.value = res.data;
     });
   });
@@ -69,14 +77,14 @@ const setStatus = (row, kidPath) => {
       [kidPath]: true,
     };
     setEntityStatus(props.path, row.id, kidPath, status).then(() => {
-      getEntities(props.path, offset, limit).then((res) => {
+      getEntities(props.path, offset.value, limit).then((res) => {
         tableData.value = res.data;
       });
     });
   } else {
     // 应付orders，可能存在问题
     setEntityStatus(props.path, row.id, kidPath).then(() => {
-      getEntities(props.path, offset, limit).then((res) => {
+      getEntities(props.path, offset.value, limit).then((res) => {
         tableData.value = res.data;
       });
     });
@@ -93,7 +101,7 @@ const handleConfirm = () => {
     updateEntity(props.path, entityId.value, entityData.value).then(() => {
       entityData.value = {};
       DialogVisible.value = false;
-      getEntities(props.path, offset, limit).then((res) => {
+      getEntities(props.path, offset.value, limit).then((res) => {
         tableData.value = res.data;
       });
     });
@@ -102,7 +110,7 @@ const handleConfirm = () => {
       entityData.value = {};
       DialogVisible.value = false;
       total.value += 1;
-      getEntities(props.path, offset, limit).then((res) => {
+      getEntities(props.path, offset.value, limit).then((res) => {
         tableData.value = res.data;
       });
     });
@@ -110,7 +118,7 @@ const handleConfirm = () => {
 };
 
 watch(currentPage, () => {
-  getEntities(props.path, offset, limit).then((res) => {
+  getEntities(props.path, offset.value, limit).then((res) => {
     tableData.value = res.data;
   });
 });
@@ -119,7 +127,7 @@ onMounted(() => {
   getTableCount(props.path).then((res) => {
     total.value = res.data.count;
   });
-  getEntities(props.path, offset, limit).then((res) => {
+  getEntities(props.path, offset.value, limit).then((res) => {
     tableData.value = res.data;
   });
 });
@@ -129,25 +137,34 @@ onMounted(() => {
   <el-table
     :data="tableData"
     style="width: 100%"
-    @row-click="$emit('rowClick', row)"
+    @row-click="(row) => emit('rowClick', row)"
   >
-    <el-table-column v-for="(k, v) in dispaly" :key="k" :label="v" :prop="k" />
+    <el-table-column v-for="(v, k) in display" :key="k" :label="v" :prop="k" />
     <el-table-column align="right">
       <template #header>
-        <el-button size="small" type="success" @click="handleCreate()" v-if="isCreateNeed">
+        <el-button
+          size="small"
+          type="success"
+          @click="handleCreate"
+          v-if="isFormNecessary"
+        >
           新建
         </el-button>
       </template>
       <template #default="scope">
-        <el-button size="small" @click="handleEdit(scope.row)" v-if="isCreateNeed">
+        <el-button
+          size="small"
+          @click="handleEdit(scope.row)"
+          v-if="isFormNecessary"
+        >
           编辑
         </el-button>
         <el-button
           size="small"
           type="warning"
-          v-for="(k, v) in changes"
+          v-for="(v, k) in changes"
           :key="k"
-          @click="setEntityStatus(scope.row, k)"
+          @click="setStatus(scope.row, k)"
         >
           {{ v }}
         </el-button>
@@ -167,10 +184,28 @@ onMounted(() => {
     />
   </div>
 
-  <el-dialog v-model="DialogVisible" title="修改数据" width="500">
+  <el-dialog v-model="DialogVisible" title="修改数据" width="500" v-if="isFormNecessary">
     <el-form :model="entityData">
       <el-form-item
-        v-for="(k, v) in entity"
+        v-for="(v, k) in entityBase"
+        :key="k"
+        :label="v"
+        :label-width="formLabelWidth"
+      >
+        <el-input v-model="entityData[k]" />
+      </el-form-item>
+      <el-form-item
+        v-for="(v, k) in entityCreate"
+        v-if="!isEdit"
+        :key="k"
+        :label="v"
+        :label-width="formLabelWidth"
+      >
+        <el-input v-model="entityData[k]" />
+      </el-form-item>
+      <el-form-item
+        v-for="(v, k) in entityUpdate"
+        v-if="isEdit"
         :key="k"
         :label="v"
         :label-width="formLabelWidth"
@@ -180,8 +215,8 @@ onMounted(() => {
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="handleCancel()">取消</el-button>
-        <el-button type="primary" @click="handleConfirm()"> 确认 </el-button>
+        <el-button @click="handleCancel">取消</el-button>
+        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
       </div>
     </template>
   </el-dialog>
