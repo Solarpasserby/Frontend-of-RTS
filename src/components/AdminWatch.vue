@@ -58,7 +58,7 @@ const handleEdit = (row) => {
 };
 
 const handleDelete = (row) => {
-  let isConfirm = confirm(`确定删除车站 ${row.name} 吗？`);
+  let isConfirm = confirm(`确定删除ID为 ${row.id} 对应的实例吗？`);
   if (!isConfirm) return;
   deleteEntity(props.path, row.id).then(() => {
     total.value -= 1;
@@ -69,7 +69,7 @@ const handleDelete = (row) => {
 };
 
 const setStatus = (row, kidPath) => {
-  let isConfirm = confirm(`确定弃用车站 ${row.name} 吗？`);
+  let isConfirm = confirm(`确定修改ID为 ${row.id} 对应的实例吗？`);
   if (!isConfirm) return;
 
   if (props.path !== "orders") {

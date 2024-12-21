@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import UserInfo from '@/views/UserInfo.vue'
+import BookTicket from '@/views/BookTicket.vue'
+import UserOrders from '@/views/UserOrders.vue'
+import UserTickets from '@/views/UserTickets.vue'
 import Admin from '@/views/Admin.vue'
 import MgStations from '@/views/MgStations.vue'
 import MgTrains from '@/views/MgTrains.vue'
@@ -16,7 +19,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      component: null,
+      component: Login,
     },
     {
       path: '/login',
@@ -36,17 +39,17 @@ const router = createRouter({
         {
           path: '/home/:userId/book',
           name: 'book',
-          component: null,
+          component: BookTicket,
         },
         {
           path: '/home/:userId/orders',
           name: 'orders',
-          component: null,
+          component: UserOrders,
         },
         {
           path: '/home/:userId/tickets',
           name: 'tickets',
-          component: null,
+          component: UserTickets,
         },
       ],
     },

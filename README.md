@@ -1,29 +1,18 @@
-# Railway Ticketing System
+# 火车售票管理系统前端项目
+------
+如题，但是写得很烂，有很多细节没实现。这边主要是记录一下目前没实现的功能，方便之后debug
 
-This template should help get you started developing with Vue 3 in Vite.
+## bug
+admin页面父组件的提交函数不会刷新页面；
+页面高度需要加长；
 
-## Recommended IDE Setup
+## 尚未实现的功能
+未登录时的拦截；
+部分状态更新的交互只支持一个值；
+表单校验；
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+## 关于后端
+没做登录验证；
+获取车次依赖于车站而非城市；
+没有实现查看当前是否还有剩余车票的功能；
+没有写选座位的功能；

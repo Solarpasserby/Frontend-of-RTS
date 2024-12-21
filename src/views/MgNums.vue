@@ -30,6 +30,8 @@ const routeDataList = ref([]);
 const formLabelWidth = "100px";
 const kidFormLabelWidth = "80px";
 
+const adminWatchRef = ref(null);
+
 const handleCreate = () => {
   baseDialogVisible.value = true;
 };
@@ -40,10 +42,12 @@ const handleCancel = () => {
   baseDialogVisible.value = false;
 };
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   for (var route of routeDataList.value) {
-    route.arrival_time = route.arrival_time.slice(11, 19);
-    route.departure_time = route.departure_time.slice(11, 19);
+    var temp = new Date(route.arrival_time);
+    route.arrival_time = temp.toLocaleString().slice(11, 19);
+    temp = new Date(route.departure_time);
+    route.departure_time = temp.toLocaleString().slice(11, 19);
   }
   runData.value.routes = routeDataList.value;
   createEntity("train_run_nums", runData.value).then(() => {
@@ -52,6 +56,9 @@ const handleConfirm = () => {
     routeDataList.value = [];
     baseDialogVisible.value = false;
   });
+  if (adminWatchRef.value) {
+    await adminWatchRef.value.refresh();
+  }
 };
 
 const handleRouteCreate = () => {
@@ -89,19 +96,26 @@ const handleRouteConfirm = () => {
   routeData.value = {};
   kidDialogVisible.value = false;
 };
+
+const handleRowClick = async (row) => {
+  console.log(row);
+  if (adminWatchRef.value) {
+    await adminWatchRef.value.refreshTable;
+  }
+};
 </script>
 
 <template>
-  <AdminWatch v-bind="post" @create="handleCreate" />
+  <AdminWatch  ref="adminWatchRef" v-bind="post" @create="handleCreate" @row-click="handleRowClick"/>
 
   <el-drawer
     v-model="baseDialogVisible"
-    title="添加列车"
+    title="添加车次"
     :before-close="handleCancel"
     direction="rtl"
     size="50%"
   >
-    <el-divider>列车信息</el-divider>
+    <el-divider>车次信息</el-divider>
     <div class="base-dialog">
       <el-form :model="runData">
         <el-form-item
@@ -114,7 +128,7 @@ const handleRouteConfirm = () => {
         </el-form-item>
       </el-form>
     </div>
-    <el-divider>车厢信息</el-divider>
+    <el-divider>站点信息</el-divider>
     <div>
       <el-table :data="routeDataList" stripe style="width: 100%">
         <el-table-column

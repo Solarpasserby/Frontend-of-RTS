@@ -39,7 +39,7 @@ const handleCancel = () => {
   baseDialogVisible.value = false;
 };
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   trainData.value.carriages = carriageDataList.value;
   createEntity("trains", trainData.value).then(() => {
     trainData.value = {};
@@ -89,7 +89,7 @@ const handleCarriageConfirm = () => {
 </script>
 
 <template>
-  <AdminWatch v-bind="post" @create="handleCreate" />
+  <AdminWatch ref="adminWatchRef" v-bind="post" @create="handleCreate" />
 
   <el-drawer
     v-model="baseDialogVisible"
