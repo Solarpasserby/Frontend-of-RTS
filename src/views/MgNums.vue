@@ -57,7 +57,7 @@ const handleConfirm = async () => {
     baseDialogVisible.value = false;
   });
   if (adminWatchRef.value) {
-    await adminWatchRef.value.refresh();
+    await adminWatchRef.value.refreshTable();
   }
 };
 
@@ -98,10 +98,6 @@ const handleRouteConfirm = () => {
 };
 
 const handleRowClick = async (row) => {
-  console.log(row);
-  if (adminWatchRef.value) {
-    await adminWatchRef.value.refreshTable;
-  }
 };
 </script>
 

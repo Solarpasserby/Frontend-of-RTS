@@ -40,6 +40,12 @@ const isFormNecessary = computed(() => {
   return props.path !== "users" && props.path !== "orders";
 });
 
+const refreshTable = () => {
+  getEntities(props.path, offset.value, limit).then((res) => {
+    tableData.value = res.data;
+  });
+};
+
 const handleCreate = () => {
   entityData.value = {};
   isEdit.value = false;
@@ -130,6 +136,10 @@ onMounted(() => {
   getEntities(props.path, offset.value, limit).then((res) => {
     tableData.value = res.data;
   });
+});
+
+defineExpose({
+  refreshTable,
 });
 </script>
 

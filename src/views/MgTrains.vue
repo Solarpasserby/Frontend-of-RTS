@@ -25,6 +25,7 @@ const isCarriageEdit = ref(false);
 const trainData = ref({});
 const carriageData = ref({});
 const carriageDataList = ref([]);
+const adminWatchRef = ref(null);
 
 const formLabelWidth = "60px";
 const kidFormLabelWidth = "80px";
@@ -47,6 +48,9 @@ const handleConfirm = async () => {
     carriageDataList.value = [];
     baseDialogVisible.value = false;
   });
+  if (adminWatchRef.value) {
+    await adminWatchRef.value.refreshTable();
+  }
 };
 
 const handleCarriageCreate = () => {
